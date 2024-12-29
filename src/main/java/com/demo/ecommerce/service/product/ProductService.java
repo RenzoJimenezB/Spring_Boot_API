@@ -1,6 +1,7 @@
 package com.demo.ecommerce.service.product;
 
 import com.demo.ecommerce.exception.ProductNotFoundException;
+import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ProductRepository;
 import com.demo.ecommerce.request.AddProductRequest;
@@ -15,8 +16,19 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public Product addProduct(AddProductRequest product) {
+    public Product addProduct(AddProductRequest request) {
         return null;
+    }
+
+    private Product createProduct(AddProductRequest request, Category category) {
+        return new Product(
+                request.getName(),
+                request.getBrand(),
+                request.getPrice(),
+                request.getStock(),
+                request.getDescription(),
+                category
+        );
     }
 
     @Override
