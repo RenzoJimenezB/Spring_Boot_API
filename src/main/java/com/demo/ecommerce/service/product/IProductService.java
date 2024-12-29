@@ -1,11 +1,12 @@
 package com.demo.ecommerce.service.product;
 
 import com.demo.ecommerce.model.Product;
+import com.demo.ecommerce.request.AddProductRequest;
 
 import java.util.List;
 
 public interface IProductService {
-    Product addProduct(Product product);
+    Product addProduct(AddProductRequest product);
 
     List<Product> getAllProducts();
 

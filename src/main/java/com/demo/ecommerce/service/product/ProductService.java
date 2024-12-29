@@ -3,6 +3,7 @@ package com.demo.ecommerce.service.product;
 import com.demo.ecommerce.exception.ProductNotFoundException;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ProductRepository;
+import com.demo.ecommerce.request.AddProductRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public Product addProduct(Product product) {
+    public Product addProduct(AddProductRequest product) {
         return null;
     }
 
