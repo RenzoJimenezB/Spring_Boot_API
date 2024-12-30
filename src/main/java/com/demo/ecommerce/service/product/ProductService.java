@@ -58,8 +58,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void updateProduct(Long id, Product product) {
+    public Product updateProduct(ProductUpdateRequest request, Long productId) {
+        Product existingProduct = getProductById(productId);
+        return productRepository.save(updateExistingProduct(existingProduct, request));
 
+//        return productRepository.findById(productId)
+//                .map(existingProduct -> updateExistingProduct(existingProduct, request))
+//                .map(productRepository::save)
+//                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
@@ -68,9 +74,11 @@ public class ProductService implements IProductService {
         existingProduct.setPrice(request.getPrice());
         existingProduct.setStock(request.getStock());
         existingProduct.setDescription(request.getDescription());
-        existingProduct.setCategory(request.getCategory());
-        return productRepository.save(existingProduct);
 
+        Category category = categoryRepository.findByName(request.getCategory().getName());
+        existingProduct.setCategory(category);
+
+        return existingProduct;
     }
 
     @Override

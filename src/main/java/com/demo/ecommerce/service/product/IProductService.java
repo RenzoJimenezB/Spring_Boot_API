@@ -2,6 +2,7 @@ package com.demo.ecommerce.service.product;
 
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.request.AddProductRequest;
+import com.demo.ecommerce.request.ProductUpdateRequest;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface IProductService {
 
     Product getProductById(Long id);
 
-    void updateProduct(Long id, Product product);
+    Product updateProduct(ProductUpdateRequest product, Long productId);
 
     void deleteProduct(Long id);
 
