@@ -3,21 +3,36 @@ package com.demo.ecommerce.service.product;
 import com.demo.ecommerce.exception.ProductNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
+import com.demo.ecommerce.repository.CategoryRepository;
 import com.demo.ecommerce.repository.ProductRepository;
 import com.demo.ecommerce.request.AddProductRequest;
+import com.demo.ecommerce.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        return null;
+        // Check if the category exists in the DB
+        // If yes, set it as the new product category
+        // If no, create the category and set it as the new product category
+
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+                .orElseGet(() -> {
+                    Category newCategory = new Category(request.getCategory().getName());
+                    return categoryRepository.save(newCategory);
+                });
+        request.setCategory(category);
+
+        return productRepository.save(createProduct(request, request.getCategory()));
     }
 
     private Product createProduct(AddProductRequest request, Category category) {
@@ -44,6 +59,17 @@ public class ProductService implements IProductService {
 
     @Override
     public void updateProduct(Long id, Product product) {
+
+    }
+
+    private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
+        existingProduct.setName(request.getName());
+        existingProduct.setBrand(request.getBrand());
+        existingProduct.setPrice(request.getPrice());
+        existingProduct.setStock(request.getStock());
+        existingProduct.setDescription(request.getDescription());
+        existingProduct.setCategory(request.getCategory());
+        return productRepository.save(existingProduct);
 
     }
 
