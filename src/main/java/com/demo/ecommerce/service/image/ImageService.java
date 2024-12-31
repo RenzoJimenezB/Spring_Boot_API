@@ -1,5 +1,6 @@
 package com.demo.ecommerce.service.image;
 
+import com.demo.ecommerce.dto.ImageDto;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Image;
 import com.demo.ecommerce.model.Product;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,9 +24,39 @@ public class ImageService implements IImageService {
     private final IProductService productService;
 
     @Override
-    public Image addImage(List<MultipartFile> files, Long productId) {
+    public List<ImageDto> addImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
-        
+
+        List<ImageDto> savedImageDto = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+
+            try {
+                Image image = new Image();
+                image.setFileName(file.getOriginalFilename());
+                image.setFileType(file.getContentType());
+                image.setImage(new SerialBlob(file.getBytes()));
+                image.setProduct(product);
+
+                String buildDownloadUrl = "/api/v1/images/image/download/";
+                image.setDownloadUrl(buildDownloadUrl + image.getId());
+
+                Image savedImage = imageRepository.save(image);
+
+                savedImage.setDownloadUrl(buildDownloadUrl + savedImage.getId());
+                imageRepository.save(savedImage);
+
+                ImageDto imageDto = new ImageDto();
+                imageDto.setId(savedImage.getId());
+                imageDto.setFileName(savedImage.getFileName());
+                imageDto.setDownloadUrl(savedImage.getDownloadUrl());
+                savedImageDto.add(imageDto);
+
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return savedImageDto;
     }
 
     @Override
@@ -34,12 +66,12 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile file, Long imageId) {
+    public void updateImage(MultipartFile file, Long imageId) {
         Image existingImage = getImageById(imageId);
 
         try {
-            existingImage.setImageName(file.getOriginalFilename());
-            existingImage.setImageType(file.getContentType());
+            existingImage.setFileName(file.getOriginalFilename());
+            existingImage.setFileType(file.getContentType());
             existingImage.setImage(new SerialBlob(file.getBytes()));
             imageRepository.save(existingImage);
 
