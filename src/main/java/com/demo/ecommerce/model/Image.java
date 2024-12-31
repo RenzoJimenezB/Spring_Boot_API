@@ -15,9 +15,9 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageName;
-    private String imageType;
-    private String imageUrl;
+    private String fileName;
+    private String fileType;
+    private String downloadUrl;
 
     @Lob
     private Blob image;
