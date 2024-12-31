@@ -1,14 +1,14 @@
 package com.demo.ecommerce.service.category;
 
-import com.demo.ecommerce.exception.CategoryNotFoundException;
+import com.demo.ecommerce.exception.AlreadyExistsException;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.repository.CategoryRepository;
-import com.demo.ecommerce.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +18,14 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category addCategory(Category category) {
-        return null;
+        if (categoryRepository.existsByName(category.getName()))
+            throw new AlreadyExistsException(category.getName() + " already exists");
+
+        return categoryRepository.save(category);
+
+//        return Optional.of(category).filter(c -> !categoryRepository.existsByName(c.getName()))
+//                .map(categoryRepository::save)
+//                .orElseThrow(() -> new AlreadyExistsException(category.getName() + " already exists"));
     }
 
     @Override
@@ -51,7 +58,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Category getCategoryByName(String name) {
+    public Optional<Category> getCategoryByName(String name) {
         return categoryRepository.findByName(name);
     }
 }
