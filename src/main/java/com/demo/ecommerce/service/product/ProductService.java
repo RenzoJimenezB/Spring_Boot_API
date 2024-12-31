@@ -1,6 +1,5 @@
 package com.demo.ecommerce.service.product;
 
-import com.demo.ecommerce.exception.ProductNotFoundException;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +51,7 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
