@@ -1,6 +1,7 @@
 package com.demo.ecommerce.service.product;
 
 import com.demo.ecommerce.exception.ProductNotFoundException;
+import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.CategoryRepository;
@@ -22,11 +23,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        // Check if the category exists in the DB
-        // If yes, set it as the new product category
-        // If no, create the category and set it as the new product category
 
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
+        Category category = categoryRepository.findByName(request.getCategory().getName())
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
                     return categoryRepository.save(newCategory);
@@ -76,9 +74,13 @@ public class ProductService implements IProductService {
         existingProduct.setStock(request.getStock());
         existingProduct.setDescription(request.getDescription());
 
-        Category category = categoryRepository.findByName(request.getCategory().getName());
-        existingProduct.setCategory(category);
+        categoryRepository.findByName(request.getCategory().getName())
+                .ifPresentOrElse(existingProduct::setCategory, () -> {
+                    throw new ResourceNotFoundException("Category not found");
+                });
 
+//        Category category = categoryRepository.findByName(request.getCategory().getName());
+//        existingProduct.setCategory(category);
         return existingProduct;
     }
 

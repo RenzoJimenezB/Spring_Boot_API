@@ -3,6 +3,7 @@ package com.demo.ecommerce.service.category;
 import com.demo.ecommerce.model.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICategoryService {
     Category addCategory(Category category);
@@ -15,7 +16,7 @@ public interface ICategoryService {
 
     void deleteCategoryById(Long id);
 
-    Category getCategoryByName(String name);
+    Optional<Category> getCategoryByName(String name);
 
 
 }
