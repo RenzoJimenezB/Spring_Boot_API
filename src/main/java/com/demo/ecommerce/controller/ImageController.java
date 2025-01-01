@@ -58,12 +58,28 @@ public class ImageController {
             return ResponseEntity.ok(new ApiResponse("Update success", null));
 
         } catch (ResourceNotFoundException e) {
-            log.info("Image with ID {} not found: {}", imageId, e.getMessage());
+            log.info(e.getMessage());
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Image not found for ID: " + imageId, null));
 
         } catch (Exception e) {
             log.error("Unexpected error while updating image with ID {}: {}", imageId, e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed", null));
+        }
+    }
+
+    @DeleteMapping("/image/{imageId}/delete/")
+    public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
+        try {
+            imageService.deleteImageById(imageId);
+            return ResponseEntity.ok(new ApiResponse("Delete success", null));
+
+        } catch (ResourceNotFoundException e) {
+            log.info(e.getMessage());
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Image not found for ID: " + imageId, null));
+
+        } catch (Exception e) {
+            log.error("Unexpected error while deleting image with ID {}: {}", imageId, e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed", null));
         }
     }
 }
