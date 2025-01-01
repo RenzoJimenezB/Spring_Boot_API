@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestController
@@ -41,45 +40,48 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/image/download/{imageId}")
-    public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
-        Image image = imageService.getImageById(imageId);
+    @GetMapping("/image/download/{id}")
+    public ResponseEntity<Resource> downloadImage(@PathVariable Long id) throws SQLException {
+        Image image = imageService.getImageById(id);
         ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
 
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getFileType()))
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(image.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"")
                 .body(resource);
     }
 
-    @PutMapping("/image/{imageId}/update")
-    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
+    @PutMapping("/image/{id}/update")
+    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long id, @RequestBody MultipartFile file) {
         try {
-            imageService.updateImage(file, imageId);
+            imageService.updateImage(file, id);
             return ResponseEntity.ok(new ApiResponse("Update success", null));
 
         } catch (ResourceNotFoundException e) {
-            log.info(e.getMessage());
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Image not found for ID: " + imageId, null));
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {
-            log.error("Unexpected error while updating image with ID {}: {}", imageId, e.getMessage());
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Update failed", null));
+            log.error("Unexpected error while updating image with ID {}: {}", id, e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Update failed", null));
         }
     }
 
-    @DeleteMapping("/image/{imageId}/delete/")
-    public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
+    @DeleteMapping("/image/{id}/delete/")
+    public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long id) {
         try {
-            imageService.deleteImageById(imageId);
+            imageService.deleteImageById(id);
             return ResponseEntity.ok(new ApiResponse("Delete success", null));
 
         } catch (ResourceNotFoundException e) {
-            log.info(e.getMessage());
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Image not found for ID: " + imageId, null));
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
 
         } catch (Exception e) {
-            log.error("Unexpected error while deleting image with ID {}: {}", imageId, e.getMessage());
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Delete failed", null));
+            log.error("Unexpected error while deleting image with ID {}: {}", id, e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Delete failed", null));
         }
     }
 }
