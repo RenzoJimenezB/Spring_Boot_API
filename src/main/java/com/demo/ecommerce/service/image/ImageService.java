@@ -62,7 +62,7 @@ public class ImageService implements IImageService {
     @Override
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Image with ID " + id + " not found"));
     }
 
     @Override
