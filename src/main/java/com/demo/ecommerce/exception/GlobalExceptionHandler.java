@@ -16,9 +16,17 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse(e.getMessage(), null));
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ApiResponse> alreadyExists(AlreadyExistsException e) {
+        return ResponseEntity.status(CONFLICT)
+                .body(new ApiResponse(e.getMessage(), null));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> unexpectedException(Exception e) {
+        String errorMessage = "An error of type " + e.getClass().getSimpleName() + " occurred: " + e.getMessage();
+
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse("An unexpected error occurred", null));
+                .body(new ApiResponse(errorMessage, null));
     }
 }
