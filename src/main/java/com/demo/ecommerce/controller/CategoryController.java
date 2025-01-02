@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -42,6 +43,18 @@ public class CategoryController {
                 .map(category -> ResponseEntity.ok(new ApiResponse("Success", category)))
                 .orElseGet(() -> ResponseEntity.status(NOT_FOUND)
                         .body(new ApiResponse("Category not found", null)));
+    }
+
+    @PutMapping("/category/{id}/update")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category requestCategory) {
+        Category updatedCategory = categoryService.updateCategory(requestCategory, id);
+        return ResponseEntity.ok(new ApiResponse("Update success", updatedCategory));
+    }
+
+    @DeleteMapping("/category/{id}/delete")
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategoryById(id);
+        return ResponseEntity.ok(new ApiResponse("Delete success", null));
     }
 
 }
