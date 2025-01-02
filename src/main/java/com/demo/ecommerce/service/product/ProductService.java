@@ -7,6 +7,7 @@ import com.demo.ecommerce.repository.CategoryRepository;
 import com.demo.ecommerce.repository.ProductRepository;
 import com.demo.ecommerce.request.AddProductRequest;
 import com.demo.ecommerce.request.ProductUpdateRequest;
+import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +18,21 @@ import java.util.List;
 public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    private final ICategoryService categoryService;
 
     @Override
     public Product addProduct(AddProductRequest request) {
+        Category category = categoryService.addCategory(request.getCategory());
+        return productRepository.save(createProduct(request, category));
 
-        Category category = categoryRepository.findByName(request.getCategory().getName())
-                .orElseGet(() -> {
-                    Category newCategory = new Category(request.getCategory().getName());
-                    return categoryRepository.save(newCategory);
-                });
-        request.setCategory(category);
+//        Category category = categoryService.getCategoryByName(request.getCategory().getName())
+//                .orElseGet(() -> {
+//                    Category newCategory = new Category(request.getCategory().getName());
+//                    return categoryRepository.save(newCategory);
+//                });
+//        request.setCategory(category);
 
-        return productRepository.save(createProduct(request, request.getCategory()));
+//        return productRepository.save(createProduct(request, request.getCategory()));
     }
 
     private Product createProduct(AddProductRequest request, Category category) {
@@ -72,7 +75,7 @@ public class ProductService implements IProductService {
         existingProduct.setStock(request.getStock());
         existingProduct.setDescription(request.getDescription());
 
-        categoryRepository.findByName(request.getCategory().getName())
+        categoryService.getCategoryByName(request.getCategory().getName())
                 .ifPresentOrElse(existingProduct::setCategory, () -> {
                     throw new ResourceNotFoundException("Category not found");
                 });

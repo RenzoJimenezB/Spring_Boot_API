@@ -1,7 +1,6 @@
 package com.demo.ecommerce.controller;
 
 import com.demo.ecommerce.exception.AlreadyExistsException;
-import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.response.ApiResponse;
 import com.demo.ecommerce.service.category.ICategoryService;
@@ -46,21 +45,15 @@ public class CategoryController {
 
     @GetMapping("/category/{id}/select")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
-        try {
-            Category category = categoryService.getCategoryById(id);
-            return ResponseEntity.ok(new ApiResponse("Success", category));
-
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND)
-                    .body(new ApiResponse(e.getMessage(), null));
-        }
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(new ApiResponse("Success", category));
     }
 
     @GetMapping("/category/{name}/name")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         return categoryService.getCategoryByName(name)
                 .map(category -> ResponseEntity.ok(new ApiResponse("Success", category)))
-                .orElseGet(() -> ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Error", null)));
+                .orElseGet(() -> ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Category not found", null)));
     }
 
 }
