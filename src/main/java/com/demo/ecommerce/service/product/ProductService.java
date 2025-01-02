@@ -22,17 +22,11 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
-        Category category = categoryService.addCategory(request.getCategory());
+        Category category = categoryService.getCategoryByName(request.getCategory().getName())
+                .orElseGet(() -> categoryService.createCategory(request.getCategory()));
+        request.setCategory(category);
+
         return productRepository.save(createProduct(request, category));
-
-//        Category category = categoryService.getCategoryByName(request.getCategory().getName())
-//                .orElseGet(() -> {
-//                    Category newCategory = new Category(request.getCategory().getName());
-//                    return categoryRepository.save(newCategory);
-//                });
-//        request.setCategory(category);
-
-//        return productRepository.save(createProduct(request, request.getCategory()));
     }
 
     private Product createProduct(AddProductRequest request, Category category) {
@@ -80,8 +74,6 @@ public class ProductService implements IProductService {
                     throw new ResourceNotFoundException("Category not found");
                 });
 
-//        Category category = categoryRepository.findByName(request.getCategory().getName());
-//        existingProduct.setCategory(category);
         return existingProduct;
     }
 
