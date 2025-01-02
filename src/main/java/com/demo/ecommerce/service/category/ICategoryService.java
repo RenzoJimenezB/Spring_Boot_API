@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface ICategoryService {
     Category addCategory(Category category);
 
+    Category createCategory(Category category);
+
     List<Category> getAllCategories();
 
     Category getCategoryById(Long id);
