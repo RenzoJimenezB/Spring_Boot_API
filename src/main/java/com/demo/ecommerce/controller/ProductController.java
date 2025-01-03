@@ -20,20 +20,14 @@ public class ProductController {
 
     private final IProductService productService;
 
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         Product savedProduct = productService.addProduct(product);
         return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
     }
 
-//
-//    @GetMapping("/all")
-//    public ResponseEntity<ApiResponse> getAllProducts() {
-//        List<Product> products = productService.getAllProducts();
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
 
- 
     @GetMapping
     public ResponseEntity<ApiResponse> searchProducts(
             @RequestParam(required = false) String name,
@@ -58,7 +52,9 @@ public class ProductController {
 
 
     @PutMapping("/product/{id}/update")
-    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest requestProduct) {
+    public ResponseEntity<ApiResponse> updateProduct(
+            @PathVariable Long id,
+            @RequestBody ProductUpdateRequest requestProduct) {
         Product updatedProduct = productService.updateProduct(requestProduct, id);
         return ResponseEntity.ok(new ApiResponse("Update success", updatedProduct));
     }

@@ -21,6 +21,7 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final ICategoryService categoryService;
 
+
     @Override
     public Product addProduct(AddProductRequest request) {
         Category category = categoryService.getCategoryByName(request.getCategory().getName())
@@ -41,16 +42,45 @@ public class ProductService implements IProductService {
         );
     }
 
-//    @Override
-//    public List<Product> getAllProducts() {
-//        return productRepository.findAll();
-//    }
+
+    @Override
+    public List<Product> searchProducts(String name, String brand, String category) {
+        Specification<Product> spec = buildProductSpecification(name, brand, category);
+        return productRepository.findAll(spec);
+    }
+
+
+    @Override
+    public Long countProducts(String name, String brand, String category) {
+        Specification<Product> spec = buildProductSpecification(name, brand, category);
+        return productRepository.count(spec);
+    }
+
+    private Specification<Product> buildProductSpecification(
+            String name,
+            String brand,
+            String category) {
+        Specification<Product> spec = Specification.where(null);
+
+        if (name != null)
+            spec = spec.and(ProductSpecifications.hasName(name));
+
+        if (brand != null)
+            spec = spec.and(ProductSpecifications.hasBrand(brand));
+
+        if (category != null)
+            spec = spec.and(ProductSpecifications.hasCategory(category));
+
+        return spec;
+    }
+
 
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
+
 
     @Override
     public Product updateProduct(ProductUpdateRequest request, Long productId) {
@@ -77,6 +107,7 @@ public class ProductService implements IProductService {
 
         return existingProduct;
     }
+
 
     @Override
     public void deleteProductById(Long id) {
@@ -108,25 +139,4 @@ public class ProductService implements IProductService {
 //    public List<Product> getProductsByBrandAndName(String brand, String name) {
 //        return productRepository.findByBrandAndName(brand, name);
 //    }
-
-    @Override
-    public Long countProductsByBrandAndName(String brand, String name) {
-        return productRepository.countByBrandAndName(brand, name);
-    }
-
-    @Override
-    public List<Product> searchProducts(String brand, String name, String category) {
-        Specification<Product> spec = Specification.where(null);
-
-        if (name != null)
-            spec = spec.and(ProductSpecifications.hasName(name));
-
-        if (brand != null)
-            spec = spec.and(ProductSpecifications.hasBrand(brand));
-
-        if (category != null)
-            spec = spec.and(ProductSpecifications.hasCategory(category));
-
-        return productRepository.findAll(spec);
-    }
 }
