@@ -59,7 +59,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/product/{id}/select")
+    @GetMapping("/{id}/select")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(new ApiResponse("Success", product));
@@ -80,44 +80,4 @@ public class ProductController {
         productService.deleteProductById(id);
         return ResponseEntity.ok(new ApiResponse("Delete success", null));
     }
-
-
-//    @GetMapping("/product/{name}/name")
-//    public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
-//        List<Product> products = productService.getProductsByName(name);
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
-//
-//
-//    @GetMapping("/product/{category}/category")
-//    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
-//        List<Product> products = productService.getProductsByCategory(category);
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
-//
-//
-//    @GetMapping("/product/{brand}/brand")
-//    public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) {
-//        List<Product> products = productService.getProductsByBrand(brand);
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
-//
-//
-//    @GetMapping("/product/{category}/{brand}/category&brand")
-//    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String category, @PathVariable String brand) {
-//        List<Product> products = productService.getProductsByCategoryAndBrand(category, brand);
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
-//
-//
-//    @GetMapping
-//    public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
-//        List<Product> products = productService.getProductsByBrandAndName(brand, name);
-//
-//        if (products.isEmpty())
-//            return ResponseEntity.status(NOT_FOUND)
-//                    .body(new ApiResponse("Products not found", null));
-//
-//        return ResponseEntity.ok(new ApiResponse("Success", products));
-//    }
 }

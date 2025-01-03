@@ -9,25 +9,13 @@ import java.util.List;
 public interface IProductService {
     Product addProduct(AddProductRequest product);
 
-//    List<Product> getAllProducts();
+    List<Product> searchProducts(String name, String brand, String category);
+
+    Long countProducts(String brand, String name, String category);
 
     Product getProductById(Long id);
 
     Product updateProduct(ProductUpdateRequest product, Long productId);
 
     void deleteProductById(Long id);
-
-//    List<Product> getProductsByCategory(String category);
-//
-//    List<Product> getProductsByBrand(String brand);
-//
-//    List<Product> getProductsByName(String name);
-//
-//    List<Product> getProductsByCategoryAndBrand(String category, String brand);
-//
-//    List<Product> getProductsByBrandAndName(String brand, String name);
-
-    Long countProducts(String brand, String name, String category);
-
-    List<Product> searchProducts(String name, String brand, String category);
 }
