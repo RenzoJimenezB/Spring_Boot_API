@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/products")
@@ -24,10 +26,26 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
     }
 
+//
+//    @GetMapping("/all")
+//    public ResponseEntity<ApiResponse> getAllProducts() {
+//        List<Product> products = productService.getAllProducts();
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
 
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+
+    @GetMapping
+    public ResponseEntity<ApiResponse> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String category) {
+
+        List<Product> products = productService.searchProducts(name, brand, category);
+
+        if (products.isEmpty())
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse("Products not found", null));
+
         return ResponseEntity.ok(new ApiResponse("Success", products));
     }
 
@@ -36,41 +54,6 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(new ApiResponse("Success", product));
-    }
-
-
-    @GetMapping("/product/{name}/name")
-    public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
-        List<Product> products = productService.getProductsByName(name);
-        return ResponseEntity.ok(new ApiResponse("Success", products));
-    }
-
-
-    @GetMapping("/product/{category}/category")
-    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
-        List<Product> products = productService.getProductsByCategory(category);
-        return ResponseEntity.ok(new ApiResponse("Success", products));
-    }
-
-
-    @GetMapping("/product/{brand}/brand")
-    public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) {
-        List<Product> products = productService.getProductsByBrand(brand);
-        return ResponseEntity.ok(new ApiResponse("Success", products));
-    }
-
-
-    @GetMapping("/product/{category}/{brand}/category&brand")
-    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String category, @PathVariable String brand) {
-        List<Product> products = productService.getProductsByCategoryAndBrand(category, brand);
-        return ResponseEntity.ok(new ApiResponse("Success", products));
-    }
-
-
-    @GetMapping("/product/{brand}/{name}/brand&name")
-    public ResponseEntity<ApiResponse> getProductsByBrandAndName(@PathVariable String brand, @PathVariable String name) {
-        List<Product> products = productService.getProductsByBrandAndName(brand, name);
-        return ResponseEntity.ok(new ApiResponse("Success", products));
     }
 
 
@@ -87,4 +70,43 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Delete success", null));
     }
 
+
+//    @GetMapping("/product/{name}/name")
+//    public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String name) {
+//        List<Product> products = productService.getProductsByName(name);
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
+//
+//
+//    @GetMapping("/product/{category}/category")
+//    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
+//        List<Product> products = productService.getProductsByCategory(category);
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
+//
+//
+//    @GetMapping("/product/{brand}/brand")
+//    public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) {
+//        List<Product> products = productService.getProductsByBrand(brand);
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
+//
+//
+//    @GetMapping("/product/{category}/{brand}/category&brand")
+//    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String category, @PathVariable String brand) {
+//        List<Product> products = productService.getProductsByCategoryAndBrand(category, brand);
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
+//
+//
+//    @GetMapping
+//    public ResponseEntity<ApiResponse> getProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
+//        List<Product> products = productService.getProductsByBrandAndName(brand, name);
+//
+//        if (products.isEmpty())
+//            return ResponseEntity.status(NOT_FOUND)
+//                    .body(new ApiResponse("Products not found", null));
+//
+//        return ResponseEntity.ok(new ApiResponse("Success", products));
+//    }
 }

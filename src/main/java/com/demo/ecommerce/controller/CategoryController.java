@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -25,17 +24,20 @@ public class CategoryController {
         return ResponseEntity.ok(new ApiResponse("Success", savedCategory));
     }
 
+
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCategories() {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(new ApiResponse("Success", categories));
     }
 
+
     @GetMapping("/category/{id}/select")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         Category category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(new ApiResponse("Success", category));
     }
+
 
     @GetMapping("/category/{name}/name")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
@@ -45,11 +47,13 @@ public class CategoryController {
                         .body(new ApiResponse("Category not found", null)));
     }
 
+
     @PutMapping("/category/{id}/update")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category requestCategory) {
         Category updatedCategory = categoryService.updateCategory(requestCategory, id);
         return ResponseEntity.ok(new ApiResponse("Update success", updatedCategory));
     }
+
 
     @DeleteMapping("/category/{id}/delete")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {

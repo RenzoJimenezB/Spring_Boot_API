@@ -3,12 +3,13 @@ package com.demo.ecommerce.service.product;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
-import com.demo.ecommerce.repository.CategoryRepository;
 import com.demo.ecommerce.repository.ProductRepository;
+import com.demo.ecommerce.repository.specification.ProductSpecifications;
 import com.demo.ecommerce.request.AddProductRequest;
 import com.demo.ecommerce.request.ProductUpdateRequest;
 import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,10 +41,10 @@ public class ProductService implements IProductService {
         );
     }
 
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
+//    @Override
+//    public List<Product> getAllProducts() {
+//        return productRepository.findAll();
+//    }
 
     @Override
     public Product getProductById(Long id) {
@@ -88,33 +89,49 @@ public class ProductService implements IProductService {
 //                });
     }
 
-    @Override
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategoryName(category);
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrand(brand);
-    }
-
-    @Override
-    public List<Product> getProductsByName(String name) {
-        return productRepository.findByName(name);
-    }
-
-    @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepository.findByCategoryNameAndBrand(category, brand);
-    }
-
-    @Override
-    public List<Product> getProductsByBrandAndName(String brand, String name) {
-        return productRepository.findByBrandAndName(brand, name);
-    }
+//    @Override
+//    public List<Product> getProductsByCategory(String category) {
+//        return productRepository.findByCategoryName(category);
+//    }
+//
+//    @Override
+//    public List<Product> getProductsByBrand(String brand) {
+//        return productRepository.findByBrand(brand);
+//    }
+//
+//    @Override
+//    public List<Product> getProductsByName(String name) {
+//        return productRepository.findByName(name);
+//    }
+//
+//    @Override
+//    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+//        return productRepository.findByCategoryNameAndBrand(category, brand);
+//    }
+//
+//    @Override
+//    public List<Product> getProductsByBrandAndName(String brand, String name) {
+//        return productRepository.findByBrandAndName(brand, name);
+//    }
 
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public List<Product> searchProducts(String brand, String name, String category) {
+        Specification<Product> spec = Specification.where(null);
+
+        if (name != null)
+            spec = spec.and(ProductSpecifications.hasName(name));
+
+        if (brand != null)
+            spec = spec.and(ProductSpecifications.hasBrand(brand));
+
+        if (category != null)
+            spec = spec.and(ProductSpecifications.hasCategory(category));
+
+        return productRepository.findAll(spec);
     }
 }
