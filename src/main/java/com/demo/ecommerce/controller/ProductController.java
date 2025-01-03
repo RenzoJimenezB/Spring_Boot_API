@@ -26,7 +26,7 @@ public class ProductController {
         Product savedProduct = productService.addProduct(product);
         return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
     }
-    
+
 
     @GetMapping
     public ResponseEntity<ApiResponse> searchProducts(
@@ -53,7 +53,7 @@ public class ProductController {
     private <T> ResponseEntity<ApiResponse> buildResponse(boolean isEmpty, T data) {
         if (isEmpty)
             return ResponseEntity.status(NOT_FOUND)
-                    .body(new ApiResponse("Product not found", null));
+                    .body(new ApiResponse("Products not found", null));
 
         return ResponseEntity.ok(new ApiResponse("Success", data));
     }
@@ -66,7 +66,7 @@ public class ProductController {
     }
 
 
-    @PutMapping("/product/{id}/update")
+    @PutMapping("/{id}/update")
     public ResponseEntity<ApiResponse> updateProduct(
             @PathVariable Long id,
             @RequestBody ProductUpdateRequest requestProduct) {
@@ -75,7 +75,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/product/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
         return ResponseEntity.ok(new ApiResponse("Delete success", null));
