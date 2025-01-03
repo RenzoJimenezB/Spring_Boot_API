@@ -82,11 +82,6 @@ public class ProductService implements IProductService {
     public void deleteProductById(Long id) {
         Product existingProduct = getProductById(id);
         productRepository.delete(existingProduct);
-
-//        productRepository.findById(id)
-//                .ifPresentOrElse(productRepository::delete, () -> {
-//                    throw new ProductNotFoundException("Product not found");
-//                });
     }
 
 //    @Override

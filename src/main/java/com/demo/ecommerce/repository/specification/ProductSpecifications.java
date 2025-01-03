@@ -17,6 +17,6 @@ public class ProductSpecifications {
 
     public static Specification<Product> hasCategory(String category) {
         return (root, query, cb) ->
-                cb.equal(root.get("category"), category);
+                cb.equal(root.get("category").get("name"), category);
     }
 }

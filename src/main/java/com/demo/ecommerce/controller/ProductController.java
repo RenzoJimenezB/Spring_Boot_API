@@ -33,7 +33,7 @@ public class ProductController {
 //        return ResponseEntity.ok(new ApiResponse("Success", products));
 //    }
 
-
+ 
     @GetMapping
     public ResponseEntity<ApiResponse> searchProducts(
             @RequestParam(required = false) String name,
