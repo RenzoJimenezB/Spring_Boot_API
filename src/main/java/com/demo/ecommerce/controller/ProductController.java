@@ -26,7 +26,7 @@ public class ProductController {
         Product savedProduct = productService.addProduct(product);
         return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
     }
-
+    
 
     @GetMapping
     public ResponseEntity<ApiResponse> searchProducts(
@@ -35,12 +35,27 @@ public class ProductController {
             @RequestParam(required = false) String category) {
 
         List<Product> products = productService.searchProducts(name, brand, category);
+        return buildResponse(products.isEmpty(), products);
+    }
 
-        if (products.isEmpty())
+
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponse> countProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String category) {
+
+        Long count = productService.countProducts(name, brand, category);
+        return buildResponse(count == 0, count);
+    }
+
+
+    private <T> ResponseEntity<ApiResponse> buildResponse(boolean isEmpty, T data) {
+        if (isEmpty)
             return ResponseEntity.status(NOT_FOUND)
-                    .body(new ApiResponse("Products not found", null));
+                    .body(new ApiResponse("Product not found", null));
 
-        return ResponseEntity.ok(new ApiResponse("Success", products));
+        return ResponseEntity.ok(new ApiResponse("Success", data));
     }
 
 
