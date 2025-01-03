@@ -107,6 +107,7 @@ public class ProductService implements IProductService {
     @Override
     public void deleteProductById(Long id) {
         Product existingProduct = getProductById(id);
+        existingProduct.setCategory(null);
         productRepository.delete(existingProduct);
     }
 }

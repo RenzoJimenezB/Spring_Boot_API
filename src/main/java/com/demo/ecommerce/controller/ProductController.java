@@ -21,7 +21,7 @@ public class ProductController {
     private final IProductService productService;
 
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         Product savedProduct = productService.addProduct(product);
         return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
@@ -32,21 +32,17 @@ public class ProductController {
     public ResponseEntity<ApiResponse> searchProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String category) {
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "false") boolean count) {
 
-        List<Product> products = productService.searchProducts(name, brand, category);
-        return buildResponse(products.isEmpty(), products);
-    }
+        if (count) {
+            Long productCount = productService.countProducts(name, brand, category);
+            return buildResponse(productCount == 0, productCount);
 
-
-    @GetMapping("/count")
-    public ResponseEntity<ApiResponse> countProducts(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String category) {
-
-        Long count = productService.countProducts(name, brand, category);
-        return buildResponse(count == 0, count);
+        } else {
+            List<Product> products = productService.searchProducts(name, brand, category);
+            return buildResponse(products.isEmpty(), products);
+        }
     }
 
 
@@ -59,14 +55,14 @@ public class ProductController {
     }
 
 
-    @GetMapping("/{id}/select")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(new ApiResponse("Success", product));
     }
 
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateProduct(
             @PathVariable Long id,
             @RequestBody ProductUpdateRequest requestProduct) {
@@ -75,7 +71,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
         return ResponseEntity.ok(new ApiResponse("Delete success", null));

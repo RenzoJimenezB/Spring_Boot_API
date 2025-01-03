@@ -18,7 +18,7 @@ public class CategoryController {
 
     private final ICategoryService categoryService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
         Category savedCategory = categoryService.addCategory(category);
         return ResponseEntity.ok(new ApiResponse("Success", savedCategory));
@@ -32,14 +32,14 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/category/{id}/select")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         Category category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(new ApiResponse("Success", category));
     }
 
 
-    @GetMapping("/category/{name}/name")
+    @GetMapping("/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         return categoryService.getCategoryByName(name)
                 .map(category -> ResponseEntity.ok(new ApiResponse("Success", category)))
@@ -48,14 +48,14 @@ public class CategoryController {
     }
 
 
-    @PutMapping("/category/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category requestCategory) {
         Category updatedCategory = categoryService.updateCategory(requestCategory, id);
         return ResponseEntity.ok(new ApiResponse("Update success", updatedCategory));
     }
 
 
-    @DeleteMapping("/category/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategoryById(id);
         return ResponseEntity.ok(new ApiResponse("Delete success", null));

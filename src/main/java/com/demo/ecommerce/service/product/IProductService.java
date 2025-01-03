@@ -11,7 +11,7 @@ public interface IProductService {
 
     List<Product> searchProducts(String name, String brand, String category);
 
-    Long countProducts(String brand, String name, String category);
+    Long countProducts(String name, String brand, String category);
 
     Product getProductById(Long id);
 
