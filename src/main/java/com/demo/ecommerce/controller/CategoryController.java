@@ -39,7 +39,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         return categoryService.getCategoryByName(name)
                 .map(category -> ResponseEntity.ok(new ApiResponse("Success", category)))
