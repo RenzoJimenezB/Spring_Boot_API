@@ -5,12 +5,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(S3Exception.class)
+    public ResponseEntity<ApiResponse> handleS3Exception(S3Exception e) {
+        String errorMessage = "S3 Exception: " + e.awsErrorDetails().errorMessage();
+        return ResponseEntity.status(e.statusCode())
+                .body(new ApiResponse(errorMessage, null));
+    }
+
+    @ExceptionHandler(SdkClientException.class)
+    public ResponseEntity<ApiResponse> handleSdkClientException(SdkClientException e) {
+        String errorMessage = "AWS SDK Error: " + e.getMessage();
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(errorMessage, null));
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException e) {
@@ -26,8 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> unexpectedException(Exception e) {
-//        log.error(e.getMessage(), e);
-        String errorMessage = "An error of type " + e.getClass().getSimpleName() + " occurred: " + e.getMessage();
+        String errorMessage = "Error of type " + e.getClass().getSimpleName() + " : " + e.getMessage();
 
         return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse(errorMessage, null));
