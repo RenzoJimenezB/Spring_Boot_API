@@ -1,5 +1,6 @@
 package com.demo.ecommerce;
 
+import com.demo.ecommerce.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -7,6 +8,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,14 +16,15 @@ public class S3Service {
 
     private final S3Client s3Client;
 
-    public String uploadFile(String bucketName, String key, Path filePath) {
+    public ApiResponse uploadFile(String bucketName, String key, Path filePath) {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
 
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(filePath));
-        return "File uploaded: " + key;
+
+        return new ApiResponse("File uploaded successfully", key);
     }
 
 
@@ -35,23 +38,36 @@ public class S3Service {
     }
 
 
-    public String deleteFile(String bucketName, String key) {
+    public ApiResponse deleteFile(String bucketName, String key) {
+        // check if the file exists
+//        HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+//                .bucket(bucketName)
+//                .key(key)
+//                .build();
+
+        // throw an exception it the object doesn't exist
+//        s3Client.headObject(headObjectRequest);
+
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
 
         s3Client.deleteObject(deleteObjectRequest);
-        return "File deleted: " + key;
+
+        return new ApiResponse("File deleted successfully", key);
     }
 
-    public void listFiles(String bucketName) {
+    public ApiResponse listFiles(String bucketName) {
         ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucketName)
                 .build();
 
         ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
+        List<String> fileNames = listObjectsResponse.contents().stream()
+                .map(S3Object::key)
+                .toList();
 
-        listObjectsResponse.contents().forEach(System.out::println);
+        return new ApiResponse("Files listed successfully", fileNames);
     }
 }
