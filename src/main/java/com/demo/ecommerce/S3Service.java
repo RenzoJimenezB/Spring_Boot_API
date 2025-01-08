@@ -28,13 +28,15 @@ public class S3Service {
     }
 
 
-    public void downloadFile(String bucketName, String key, Path destination) {
+    public ApiResponse downloadFile(String bucketName, String key, Path destination) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
 
         s3Client.getObject(getObjectRequest, destination);
+
+        return new ApiResponse("File downloaded successfully", destination.toString());
     }
 
 

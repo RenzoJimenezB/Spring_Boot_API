@@ -26,23 +26,23 @@ public class S3Controller {
     public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         String key = file.getOriginalFilename();
 
-        Path tempFile = Paths.get(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
-        file.transferTo(tempFile);
+        Path tempFilePath = Paths.get(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
+        file.transferTo(tempFilePath);
 
-        ApiResponse uploadResponse = s3Service.uploadFile(bucketName, key, tempFile);
+        ApiResponse uploadResponse = s3Service.uploadFile(bucketName, key, tempFilePath);
         return ResponseEntity.ok(uploadResponse);
 
-    }
-
-    @DeleteMapping
-    public ResponseEntity<ApiResponse> deleteFile(@RequestParam("key") String key) {
-        ApiResponse deleteResposne = s3Service.deleteFile(bucketName, key);
-        return ResponseEntity.ok(deleteResposne);
     }
 
     @GetMapping("/list")
     public ResponseEntity<ApiResponse> listFiles() {
         ApiResponse listResponse = s3Service.listFiles(bucketName);
         return ResponseEntity.ok(listResponse);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse> deleteFile(@RequestParam("key") String key) {
+        ApiResponse deleteResponse = s3Service.deleteFile(bucketName, key);
+        return ResponseEntity.ok(deleteResponse);
     }
 }

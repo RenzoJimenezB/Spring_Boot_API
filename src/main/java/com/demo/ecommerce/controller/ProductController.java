@@ -6,6 +6,7 @@ import com.demo.ecommerce.request.ProductUpdateRequest;
 import com.demo.ecommerce.response.ApiResponse;
 import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,8 @@ public class ProductController {
 
     private final IProductService productService;
 
+    @Value("${aws.s3.bucket-name}")
+    private String bucketName;
 
     @PostMapping
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
