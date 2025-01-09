@@ -22,6 +22,7 @@ public class S3Controller {
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
 
+
     @PostMapping
     public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         String key = file.getOriginalFilename();
