@@ -1,16 +1,18 @@
 package com.demo.ecommerce.controller;
 
+import com.demo.ecommerce.dto.ProductPage;
+import com.demo.ecommerce.dto.ProductResponse;
+import com.demo.ecommerce.mapper.ProductPageMapper;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.request.AddProductRequest;
 import com.demo.ecommerce.request.ProductUpdateRequest;
 import com.demo.ecommerce.response.ApiResponse;
 import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -20,9 +22,8 @@ import static org.springframework.http.HttpStatus.*;
 public class ProductController {
 
     private final IProductService productService;
+    private final ProductPageMapper productPageMapper;
 
-    @Value("${aws.s3.bucket-name}")
-    private String bucketName;
 
     @PostMapping
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
@@ -33,6 +34,8 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> searchProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String category,
@@ -43,8 +46,9 @@ public class ProductController {
             return buildResponse(productCount == 0, productCount);
 
         } else {
-            List<Product> products = productService.searchProducts(name, brand, category);
-            return buildResponse(products.isEmpty(), products);
+            Page<ProductResponse> products = productService.searchProducts(name, brand, category, page, size);
+            ProductPage productsPage = productPageMapper.toProductPage(products);
+            return buildResponse(products.isEmpty(), productsPage);
         }
     }
 
@@ -60,7 +64,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
+        ProductResponse product = productService.getProductResponseById(id);
         return ResponseEntity.ok(new ApiResponse("Success", product));
     }
 
