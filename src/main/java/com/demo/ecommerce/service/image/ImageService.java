@@ -1,6 +1,5 @@
 package com.demo.ecommerce.service.image;
 
-import com.demo.ecommerce.exception.AlreadyExistsException;
 import com.demo.ecommerce.model.Image;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ImageRepository;
@@ -9,6 +8,8 @@ import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -34,6 +35,13 @@ public class ImageService implements IImageService {
         Image savedImage = imageRepository.save(image);
 
         return ResponseEntity.ok(new ApiResponse("Success", savedImage));
+    }
+
+
+    @Override
+    public ResponseEntity<ApiResponse> getImagesByProductId(Long productId) {
+        List<Image> images = imageRepository.findByProductId(productId);
+        return ResponseEntity.ok(new ApiResponse("Success", images));
     }
 
 
