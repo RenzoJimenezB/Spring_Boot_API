@@ -37,12 +37,14 @@ public class S3Controller {
         return s3Service.uploadFile(bucketName, key, tempFilePath, productId);
     }
 
+
     @GetMapping("/list")
     public ResponseEntity<ApiResponse> listFiles() {
         ApiResponse listResponse = s3Service.listFiles(bucketName);
         return ResponseEntity.ok(listResponse);
     }
 
+    
     @DeleteMapping
     public ResponseEntity<ApiResponse> deleteFile(@RequestParam("key") String key) {
         return s3Service.deleteFile(bucketName, key);

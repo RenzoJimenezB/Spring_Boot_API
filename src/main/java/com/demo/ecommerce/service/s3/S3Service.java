@@ -36,28 +36,7 @@ public class S3Service {
     }
 
 
-    public ApiResponse downloadFile(String bucketName, String key, Path destination) {
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
-
-        s3Client.getObject(getObjectRequest, destination);
-
-        return new ApiResponse("File downloaded successfully", destination.toString());
-    }
-
-
     public ResponseEntity<ApiResponse> deleteFile(String bucketName, String key) {
-        // check if the file exists
-//        HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
-//                .bucket(bucketName)
-//                .key(key)
-//                .build();
-
-        // throw an exception it the object doesn't exist
-//        s3Client.headObject(headObjectRequest);
-
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -67,6 +46,7 @@ public class S3Service {
         return imageService.deleteImage(key);
     }
 
+    
     public ApiResponse listFiles(String bucketName) {
         ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucketName)
