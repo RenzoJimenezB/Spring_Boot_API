@@ -3,7 +3,6 @@ package com.demo.ecommerce.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Blob;
 
 @Getter
 @Setter
