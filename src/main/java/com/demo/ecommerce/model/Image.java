@@ -13,15 +13,9 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String fileName;
-    private String fileType;
-    private String downloadUrl;
-
-    @Lob
-    private Blob image;
+    private String imageKey;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 }
