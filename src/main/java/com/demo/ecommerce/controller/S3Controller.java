@@ -1,6 +1,6 @@
 package com.demo.ecommerce.controller;
 
-import com.demo.ecommerce.S3Service;
+import com.demo.ecommerce.service.s3.S3Service;
 import com.demo.ecommerce.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,16 +23,18 @@ public class S3Controller {
     private String bucketName;
 
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/{productId}")
+    public ResponseEntity<ApiResponse> uploadFile(
+            @RequestParam MultipartFile file,
+            @PathVariable Long productId
+    ) throws IOException {
+
         String key = file.getOriginalFilename();
 
         Path tempFilePath = Paths.get(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
         file.transferTo(tempFilePath);
 
-        ApiResponse uploadResponse = s3Service.uploadFile(bucketName, key, tempFilePath);
-        return ResponseEntity.ok(uploadResponse);
-
+        return s3Service.uploadFile(bucketName, key, tempFilePath, productId);
     }
 
     @GetMapping("/list")
@@ -43,7 +45,6 @@ public class S3Controller {
 
     @DeleteMapping
     public ResponseEntity<ApiResponse> deleteFile(@RequestParam("key") String key) {
-        ApiResponse deleteResponse = s3Service.deleteFile(bucketName, key);
-        return ResponseEntity.ok(deleteResponse);
+        return s3Service.deleteFile(bucketName, key);
     }
 }

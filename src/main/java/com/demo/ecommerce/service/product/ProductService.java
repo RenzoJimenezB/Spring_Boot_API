@@ -94,7 +94,7 @@ public class ProductService implements IProductService {
     }
 
 
-    private Product getProductEntityById(Long id) {
+    public Product getProductEntityById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }

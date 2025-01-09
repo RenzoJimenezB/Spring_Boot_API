@@ -14,6 +14,8 @@ public interface IProductService {
 
     Long countProducts(String name, String brand, String category);
 
+    Product getProductEntityById(Long productId);
+
     ProductResponse getProductResponseById(Long id);
 
     Product updateProduct(ProductUpdateRequest product, Long productId);

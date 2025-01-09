@@ -1,7 +1,9 @@
-package com.demo.ecommerce;
+package com.demo.ecommerce.service.s3;
 
 import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -15,17 +17,22 @@ import java.util.List;
 public class S3Service {
 
     private final S3Client s3Client;
+    private final IImageService imageService;
 
 
-    public ApiResponse uploadFile(String bucketName, String key, Path filePath) {
+    public ResponseEntity<ApiResponse> uploadFile(
+            String bucketName,
+            String key,
+            Path filePath,
+            Long productId
+    ) {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
 
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(filePath));
-
-        return new ApiResponse("File uploaded successfully", key);
+        return imageService.addImage(key, productId);
     }
 
 
@@ -41,7 +48,7 @@ public class S3Service {
     }
 
 
-    public ApiResponse deleteFile(String bucketName, String key) {
+    public ResponseEntity<ApiResponse> deleteFile(String bucketName, String key) {
         // check if the file exists
 //        HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
 //                .bucket(bucketName)
@@ -57,8 +64,7 @@ public class S3Service {
                 .build();
 
         s3Client.deleteObject(deleteObjectRequest);
-
-        return new ApiResponse("File deleted successfully", key);
+        return imageService.deleteImage(key);
     }
 
     public ApiResponse listFiles(String bucketName) {
