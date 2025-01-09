@@ -1,6 +1,8 @@
 package com.demo.ecommerce.service.product;
 
+import com.demo.ecommerce.dto.ProductResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
+import com.demo.ecommerce.mapper.ProductMapper;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ProductRepository;
@@ -9,10 +11,13 @@ import com.demo.ecommerce.request.AddProductRequest;
 import com.demo.ecommerce.request.ProductUpdateRequest;
 import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,10 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final ICategoryService categoryService;
+    private final ProductMapper productMapper;
+
+    @Value("${cloudfront.domain}")
+    private String cloudFrontDomain;
 
 
     @Override
@@ -44,9 +53,12 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public List<Product> searchProducts(String name, String brand, String category) {
+    public Page<ProductResponse> searchProducts(String name, String brand, String category, int page, int size) {
         Specification<Product> spec = buildProductSpecification(name, brand, category);
-        return productRepository.findAll(spec);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Product> productPage = productRepository.findAll(spec, pageable);
+        return productPage.map(product -> productMapper.toProductResponse(product, cloudFrontDomain));
     }
 
 
@@ -76,7 +88,13 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public Product getProductById(Long id) {
+    public ProductResponse getProductResponseById(Long id) {
+        Product product = getProductEntityById(id);
+        return productMapper.toProductResponse(product, cloudFrontDomain);
+    }
+
+
+    private Product getProductEntityById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
@@ -84,7 +102,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Product updateProduct(ProductUpdateRequest request, Long productId) {
-        Product existingProduct = getProductById(productId);
+        Product existingProduct = getProductEntityById(productId);
         return productRepository.save(updateExistingProduct(existingProduct, request));
     }
 
@@ -106,7 +124,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void deleteProductById(Long id) {
-        Product existingProduct = getProductById(id);
+        Product existingProduct = getProductEntityById(id);
         existingProduct.setCategory(null);
         productRepository.delete(existingProduct);
     }
