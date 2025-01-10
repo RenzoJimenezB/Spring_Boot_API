@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${api.prefix}/images")
 public class ImageController {
 
+
     private final IImageService imageService;
 
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse> getAllImages(@PathVariable Long productId) {
-        return imageService.getImagesByProductId(productId);
+    public ResponseEntity<ApiResponse> getProductImages(@PathVariable Long productId) {
+        ApiResponse response = imageService.getImagesByProductId(productId);
+        return ResponseEntity.ok(response);
     }
-
 }

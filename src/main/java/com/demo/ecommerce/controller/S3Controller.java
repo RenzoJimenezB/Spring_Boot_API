@@ -34,7 +34,8 @@ public class S3Controller {
         Path tempFilePath = Paths.get(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
         file.transferTo(tempFilePath);
 
-        return s3Service.uploadFile(bucketName, key, tempFilePath, productId);
+        ApiResponse uploadResponse = s3Service.uploadFile(bucketName, key, tempFilePath, productId);
+        return ResponseEntity.ok(uploadResponse);
     }
 
 
@@ -44,9 +45,11 @@ public class S3Controller {
         return ResponseEntity.ok(listResponse);
     }
 
-    
+
     @DeleteMapping
     public ResponseEntity<ApiResponse> deleteFile(@RequestParam("key") String key) {
-        return s3Service.deleteFile(bucketName, key);
+
+        ApiResponse deleteResponse = s3Service.deleteFile(bucketName, key);
+        return ResponseEntity.ok(deleteResponse);
     }
 }

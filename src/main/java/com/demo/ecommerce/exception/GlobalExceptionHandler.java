@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse(errorMessage, null));
     }
 
+
     @ExceptionHandler(SdkClientException.class)
     public ResponseEntity<ApiResponse> handleSdkClientException(SdkClientException e) {
         String errorMessage = "AWS SDK Error: " + e.getMessage();
@@ -28,17 +29,20 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse(errorMessage, null));
     }
 
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException e) {
         return ResponseEntity.status(NOT_FOUND)
                 .body(new ApiResponse(e.getMessage(), null));
     }
 
+
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ApiResponse> alreadyExists(AlreadyExistsException e) {
         return ResponseEntity.status(CONFLICT)
                 .body(new ApiResponse(e.getMessage(), null));
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> unexpectedException(Exception e) {

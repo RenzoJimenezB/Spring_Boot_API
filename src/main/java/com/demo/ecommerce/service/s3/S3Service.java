@@ -3,7 +3,6 @@ package com.demo.ecommerce.service.s3;
 import com.demo.ecommerce.response.ApiResponse;
 import com.demo.ecommerce.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -20,7 +19,7 @@ public class S3Service {
     private final IImageService imageService;
 
 
-    public ResponseEntity<ApiResponse> uploadFile(
+    public ApiResponse uploadFile(
             String bucketName,
             String key,
             Path filePath,
@@ -36,7 +35,7 @@ public class S3Service {
     }
 
 
-    public ResponseEntity<ApiResponse> deleteFile(String bucketName, String key) {
+    public ApiResponse deleteFile(String bucketName, String key) {
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -46,7 +45,7 @@ public class S3Service {
         return imageService.deleteImage(key);
     }
 
-    
+
     public ApiResponse listFiles(String bucketName) {
         ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucketName)
