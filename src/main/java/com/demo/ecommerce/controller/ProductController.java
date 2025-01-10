@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URI;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -28,7 +30,10 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         Product savedProduct = productService.addProduct(product);
-        return ResponseEntity.ok(new ApiResponse("Success", savedProduct));
+        URI location = URI.create("/products/" + savedProduct.getId());
+
+        return ResponseEntity.created(location)
+                .body(new ApiResponse("Success", savedProduct));
     }
 
 
