@@ -1,40 +1,50 @@
 package com.demo.ecommerce.controller;
 
+import com.demo.ecommerce.dto.response.CategoryResponse;
 import com.demo.ecommerce.model.Category;
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
 
+
     private final ICategoryService categoryService;
+
 
     @PostMapping
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
         Category savedCategory = categoryService.addCategory(category);
-        return ResponseEntity.ok(new ApiResponse("Success", savedCategory));
+        URI location = URI.create("/categories/" + savedCategory.getId());
+
+        return ResponseEntity.created(location)
+                .body(new ApiResponse("Success", savedCategory));
+
+        // mapping?
     }
 
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
+        List<CategoryResponse> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(new ApiResponse("Success", categories));
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
+        CategoryResponse category = categoryService.getCategoryResponseById(id);
         return ResponseEntity.ok(new ApiResponse("Success", category));
     }
 
