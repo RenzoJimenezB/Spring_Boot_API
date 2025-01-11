@@ -1,5 +1,6 @@
 package com.demo.ecommerce.service.category;
 
+import com.demo.ecommerce.dto.response.CategoryResponse;
 import com.demo.ecommerce.model.Category;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface ICategoryService {
 
     Category createCategory(Category category);
 
-    List<Category> getAllCategories();
+    List<CategoryResponse> getAllCategories();
 
-    Category getCategoryById(Long id);
+    CategoryResponse getCategoryResponseById(Long id);
 
     Category updateCategory(Category category, Long categoryId);
 

@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.s3;
 
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

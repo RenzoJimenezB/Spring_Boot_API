@@ -1,7 +1,7 @@
 package com.demo.ecommerce.mapper;
 
 import com.demo.ecommerce.dto.ProductPage;
-import com.demo.ecommerce.dto.ProductResponse;
+import com.demo.ecommerce.dto.response.ProductResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

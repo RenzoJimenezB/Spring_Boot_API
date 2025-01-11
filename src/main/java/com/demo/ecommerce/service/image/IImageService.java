@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.image;
 
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.response.ApiResponse;
 
 public interface IImageService {
     ApiResponse addImage(String imageKey, Long productId);

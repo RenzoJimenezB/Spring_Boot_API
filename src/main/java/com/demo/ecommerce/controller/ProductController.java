@@ -1,12 +1,12 @@
 package com.demo.ecommerce.controller;
 
 import com.demo.ecommerce.dto.ProductPage;
-import com.demo.ecommerce.dto.ProductResponse;
+import com.demo.ecommerce.dto.response.ProductResponse;
 import com.demo.ecommerce.mapper.ProductPageMapper;
 import com.demo.ecommerce.model.Product;
-import com.demo.ecommerce.request.AddProductRequest;
-import com.demo.ecommerce.request.ProductUpdateRequest;
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.request.AddProductRequest;
+import com.demo.ecommerce.dto.request.ProductUpdateRequest;
+import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,10 +18,12 @@ import java.net.URI;
 
 import static org.springframework.http.HttpStatus.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
+
 
     private final IProductService productService;
     private final ProductPageMapper productPageMapper;

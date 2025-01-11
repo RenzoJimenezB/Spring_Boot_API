@@ -1,7 +1,7 @@
 package com.demo.ecommerce.controller;
 
 import com.demo.ecommerce.service.s3.S3Service;
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

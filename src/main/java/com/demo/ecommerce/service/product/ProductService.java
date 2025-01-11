@@ -1,14 +1,14 @@
 package com.demo.ecommerce.service.product;
 
-import com.demo.ecommerce.dto.ProductResponse;
+import com.demo.ecommerce.dto.response.ProductResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.mapper.ProductMapper;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ProductRepository;
 import com.demo.ecommerce.repository.specification.ProductSpecifications;
-import com.demo.ecommerce.request.AddProductRequest;
-import com.demo.ecommerce.request.ProductUpdateRequest;
+import com.demo.ecommerce.dto.request.AddProductRequest;
+import com.demo.ecommerce.dto.request.ProductUpdateRequest;
 import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +23,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
 
+
     private final ProductRepository productRepository;
     private final ICategoryService categoryService;
     private final ProductMapper productMapper;
+
 
     @Value("${cloudfront.domain}")
     private String cloudFrontDomain;

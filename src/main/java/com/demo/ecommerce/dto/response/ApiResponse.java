@@ -1,4 +1,4 @@
-package com.demo.ecommerce.response;
+package com.demo.ecommerce.dto.response;
 
 
 public record ApiResponse(

@@ -1,4 +1,4 @@
-package com.demo.ecommerce.dto;
+package com.demo.ecommerce.dto.response;
 
 import java.math.BigDecimal;
 import java.util.List;
