@@ -1,22 +1,27 @@
 package com.demo.ecommerce.service.image;
 
+import com.demo.ecommerce.dto.response.ImageResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
+import com.demo.ecommerce.mapper.ImageMapper;
 import com.demo.ecommerce.model.Image;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ImageRepository;
-import com.demo.ecommerce.response.ApiResponse;
+import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class ImageService implements IImageService {
 
+
     private final ImageRepository imageRepository;
     private final IProductService productService;
+    private final ImageMapper imageMapper;
 
 
     @Override
@@ -38,7 +43,11 @@ public class ImageService implements IImageService {
     @Override
     public ApiResponse getImagesByProductId(Long productId) {
         List<Image> images = imageRepository.findByProductId(productId);
-        return new ApiResponse("Success", images);
+        List<ImageResponse> mappedImages = images
+                .stream()
+                .map(imageMapper::toImageResponse).toList();
+
+        return new ApiResponse("Success", mappedImages);
     }
 
 
