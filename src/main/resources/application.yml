@@ -17,6 +17,8 @@ spring:
 aws:
   s3:
     bucket-name: ${AWS_S3_BUCKET_NAME}
+  secrets:
+    jwt-secret-name: ${AWS_JWT_SECRET_NAME}
 
 cloudfront:
   domain: ${CLOUDFRONT_DOMAIN}
