@@ -62,6 +62,12 @@ public class CategoryService implements ICategoryService {
 
 
     @Override
+    public Optional<Category> getCategoryByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
+
+    @Override
     public Category updateCategory(Category requestCategory, Long categoryId) {
         Category existingCategory = getCategoryEntityById(categoryId);
         existingCategory.setName(requestCategory.getName());
@@ -73,11 +79,5 @@ public class CategoryService implements ICategoryService {
     public void deleteCategoryById(Long id) {
         Category category = getCategoryEntityById(id);
         categoryRepository.delete(category);
-    }
-
-
-    @Override
-    public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
     }
 }

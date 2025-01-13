@@ -1,6 +1,7 @@
 package com.demo.ecommerce.controller;
 
 import com.demo.ecommerce.dto.response.CategoryResponse;
+import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.category.ICategoryService;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
@@ -30,8 +29,6 @@ public class CategoryController {
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse("Success", savedCategory));
-
-        // mapping?
     }
 
 
@@ -53,8 +50,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         return categoryService.getCategoryByName(name)
                 .map(category -> ResponseEntity.ok(new ApiResponse("Success", category)))
-                .orElseGet(() -> ResponseEntity.status(NOT_FOUND)
-                        .body(new ApiResponse("Category not found", null)));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
 
