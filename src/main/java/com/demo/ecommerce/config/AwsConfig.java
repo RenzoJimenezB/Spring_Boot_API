@@ -21,10 +21,10 @@ public class AwsConfig {
     }
 
 
-    @Bean
-    public SecretsManagerClient secretsManagerClient() {
-        return SecretsManagerClient.builder()
-                .region(Region.US_EAST_1)
-                .build();
-    }
+//    @Bean
+//    public SecretsManagerClient secretsManagerClient() {
+//        return SecretsManagerClient.builder()
+//                .region(Region.US_EAST_1)
+//                .build();
+//    }
 }
