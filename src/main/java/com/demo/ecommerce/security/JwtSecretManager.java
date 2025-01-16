@@ -23,7 +23,7 @@ public class JwtSecretManager {
     private final SecretsManagerClient secretsClient;
 
 
-    @Value("${aws.secrets.jwt-secret-name}")
+    @Value("${ aws.secrets.jwt-secret-name}")
     private String secretName;
 
 
@@ -48,7 +48,7 @@ public class JwtSecretManager {
         }
     }
 
-    
+
     private SecretKey createSecretKey() {
         try {
             SecretKey key = Jwts.SIG.HS256.key().build();
