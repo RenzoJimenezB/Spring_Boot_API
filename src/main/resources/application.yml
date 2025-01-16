@@ -14,6 +14,7 @@ spring:
     hibernate:
       ddl-auto: update
 
+
 aws:
   region: ${AWS_REGION}
   s3:
@@ -21,11 +22,19 @@ aws:
   secrets:
     jwt-secret-name: ${AWS_JWT_SECRET_NAME}
 
+
+jwt:
+  expiration-time: ${JWT_EXPIRATION_TIME}
+  refresh-time: ${JWT_REFRESH_TIME}
+
+
 cloudfront:
   domain: ${CLOUDFRONT_DOMAIN}
 
+
 api:
   prefix: /api/v1
+
 
 server:
   port: 9193
