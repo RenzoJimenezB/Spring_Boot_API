@@ -3,6 +3,7 @@ package com.demo.ecommerce.exception;
 import com.demo.ecommerce.dto.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -32,6 +33,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException e) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(new ApiResponse(e.getMessage(), null));
+    }
+
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiResponse> usernameNotFound(UsernameNotFoundException e) {
         return ResponseEntity.status(NOT_FOUND)
                 .body(new ApiResponse(e.getMessage(), null));
     }
