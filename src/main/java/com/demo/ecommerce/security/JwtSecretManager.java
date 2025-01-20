@@ -23,7 +23,7 @@ public class JwtSecretManager {
     private final SecretsManagerClient secretsClient;
 
 
-    @Value("${ aws.secrets.jwt-secret-name}")
+    @Value("${aws.secrets.jwt-secret-name}")
     private String secretName;
 
 
