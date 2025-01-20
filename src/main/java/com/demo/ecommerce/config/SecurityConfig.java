@@ -1,7 +1,7 @@
 package com.demo.ecommerce.config;
 
 import com.demo.ecommerce.repository.UserRepository;
-import com.demo.ecommerce.security.JwtAuthenticationFilter;
+import com.demo.ecommerce.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

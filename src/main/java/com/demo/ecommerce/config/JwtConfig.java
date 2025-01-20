@@ -1,6 +1,6 @@
 package com.demo.ecommerce.config;
 
-import com.demo.ecommerce.security.JwtSecretManager;
+import com.demo.ecommerce.security.jwt.JwtSecretManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class JwtConfig {
 
-    
+
     private final JwtSecretManager jwtSecretManager;
 
 
