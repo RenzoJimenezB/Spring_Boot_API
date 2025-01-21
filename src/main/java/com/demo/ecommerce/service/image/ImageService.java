@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.image;
 
-import com.demo.ecommerce.dto.response.ImageResponse;
+import com.demo.ecommerce.dto.image.ImageResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.mapper.ImageMapper;
 import com.demo.ecommerce.model.Image;

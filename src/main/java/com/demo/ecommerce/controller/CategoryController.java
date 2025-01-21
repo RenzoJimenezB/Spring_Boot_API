@@ -1,6 +1,6 @@
 package com.demo.ecommerce.controller;
 
-import com.demo.ecommerce.dto.response.CategoryResponse;
+import com.demo.ecommerce.dto.category.CategoryResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.dto.response.ApiResponse;

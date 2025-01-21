@@ -1,14 +1,14 @@
 package com.demo.ecommerce.service.product;
 
-import com.demo.ecommerce.dto.response.ProductResponse;
+import com.demo.ecommerce.dto.product.ProductResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.mapper.ProductMapper;
 import com.demo.ecommerce.model.Category;
 import com.demo.ecommerce.model.Product;
 import com.demo.ecommerce.repository.ProductRepository;
 import com.demo.ecommerce.repository.specification.ProductSpecifications;
-import com.demo.ecommerce.dto.request.AddProductRequest;
-import com.demo.ecommerce.dto.request.ProductUpdateRequest;
+import com.demo.ecommerce.dto.product.AddProductRequest;
+import com.demo.ecommerce.dto.product.ProductUpdateRequest;
 import com.demo.ecommerce.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.demo.ecommerce.dto.response;
+package com.demo.ecommerce.dto.image;
 
 public record ImageResponse(
         Long id,

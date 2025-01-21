@@ -29,6 +29,10 @@ public class JwtService {
     private Long refreshTime;
 
 
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
     public String generateToken(
             Map<String, Object> claims,
             UserDetails userDetails

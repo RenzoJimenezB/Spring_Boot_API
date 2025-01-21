@@ -1,6 +1,6 @@
 package com.demo.ecommerce.mapper;
 
-import com.demo.ecommerce.dto.response.ProductResponse;
+import com.demo.ecommerce.dto.product.ProductResponse;
 import com.demo.ecommerce.model.Image;
 import com.demo.ecommerce.model.Product;
 import org.mapstruct.Context;

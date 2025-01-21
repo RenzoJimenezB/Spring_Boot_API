@@ -1,6 +1,4 @@
-package com.demo.ecommerce.dto;
-
-import com.demo.ecommerce.dto.response.ProductResponse;
+package com.demo.ecommerce.dto.product;
 
 import java.util.List;
 

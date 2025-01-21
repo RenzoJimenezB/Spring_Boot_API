@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.category;
 
-import com.demo.ecommerce.dto.response.CategoryResponse;
+import com.demo.ecommerce.dto.category.CategoryResponse;
 import com.demo.ecommerce.model.Category;
 
 import java.util.List;

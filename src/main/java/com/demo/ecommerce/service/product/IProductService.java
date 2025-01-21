@@ -1,9 +1,9 @@
 package com.demo.ecommerce.service.product;
 
-import com.demo.ecommerce.dto.response.ProductResponse;
+import com.demo.ecommerce.dto.product.ProductResponse;
 import com.demo.ecommerce.model.Product;
-import com.demo.ecommerce.dto.request.AddProductRequest;
-import com.demo.ecommerce.dto.request.ProductUpdateRequest;
+import com.demo.ecommerce.dto.product.AddProductRequest;
+import com.demo.ecommerce.dto.product.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
 
 

@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.user;
 
-import com.demo.ecommerce.dto.response.UserResponse;
+import com.demo.ecommerce.dto.user.UserResponse;
 import com.demo.ecommerce.exception.ResourceNotFoundException;
 import com.demo.ecommerce.mapper.UserMapper;
 import com.demo.ecommerce.model.User;

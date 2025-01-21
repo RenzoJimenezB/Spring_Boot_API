@@ -1,11 +1,11 @@
 package com.demo.ecommerce.controller;
 
-import com.demo.ecommerce.dto.ProductPage;
-import com.demo.ecommerce.dto.response.ProductResponse;
+import com.demo.ecommerce.dto.product.ProductPage;
+import com.demo.ecommerce.dto.product.ProductResponse;
 import com.demo.ecommerce.mapper.ProductPageMapper;
 import com.demo.ecommerce.model.Product;
-import com.demo.ecommerce.dto.request.AddProductRequest;
-import com.demo.ecommerce.dto.request.ProductUpdateRequest;
+import com.demo.ecommerce.dto.product.AddProductRequest;
+import com.demo.ecommerce.dto.product.ProductUpdateRequest;
 import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.product.IProductService;
 import lombok.RequiredArgsConstructor;

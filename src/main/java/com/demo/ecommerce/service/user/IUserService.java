@@ -1,6 +1,6 @@
 package com.demo.ecommerce.service.user;
 
-import com.demo.ecommerce.dto.response.UserResponse;
+import com.demo.ecommerce.dto.user.UserResponse;
 
 public interface IUserService {
 

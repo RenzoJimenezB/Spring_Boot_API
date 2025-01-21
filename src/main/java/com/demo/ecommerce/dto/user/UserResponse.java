@@ -1,4 +1,4 @@
-package com.demo.ecommerce.dto.response;
+package com.demo.ecommerce.dto.user;
 
 import com.demo.ecommerce.enums.Role;
 

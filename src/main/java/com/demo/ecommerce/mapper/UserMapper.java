@@ -1,6 +1,6 @@
 package com.demo.ecommerce.mapper;
 
-import com.demo.ecommerce.dto.response.UserResponse;
+import com.demo.ecommerce.dto.user.UserResponse;
 import com.demo.ecommerce.model.User;
 import org.mapstruct.Mapper;
 

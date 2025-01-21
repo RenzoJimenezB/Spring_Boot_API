@@ -1,12 +1,13 @@
-package com.demo.ecommerce.dto.request;
+package com.demo.ecommerce.dto.product;
 
 import com.demo.ecommerce.model.Category;
 import lombok.Data;
 
+
 import java.math.BigDecimal;
 
 @Data
-public class ProductUpdateRequest {
+public class AddProductRequest {
     private Long id;
     private String name;
     private String brand;
