@@ -36,7 +36,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("").permitAll())
+                        authorize.requestMatchers("/api/v1/auth/**").permitAll())
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().authenticated())
                 .sessionManagement(session ->
@@ -75,6 +75,4 @@ public class SecurityConfig {
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
-
 }

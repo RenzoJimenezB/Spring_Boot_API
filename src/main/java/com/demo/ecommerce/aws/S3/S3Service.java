@@ -1,4 +1,4 @@
-package com.demo.ecommerce.s3;
+package com.demo.ecommerce.aws.S3;
 
 import com.demo.ecommerce.dto.response.ApiResponse;
 import com.demo.ecommerce.service.image.IImageService;
