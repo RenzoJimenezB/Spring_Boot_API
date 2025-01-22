@@ -3,10 +3,15 @@ package com.demo.ecommerce.security.auth;
 import com.demo.ecommerce.dto.auth.AuthenticationRequest;
 import com.demo.ecommerce.dto.auth.AuthenticationResponse;
 import com.demo.ecommerce.dto.auth.RegisterRequest;
+import com.demo.ecommerce.enums.Role;
 import com.demo.ecommerce.model.User;
 import com.demo.ecommerce.repository.UserRepository;
 import com.demo.ecommerce.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -16,7 +21,9 @@ public class AuthenticationService {
 
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -24,9 +31,9 @@ public class AuthenticationService {
                 .name(request.getName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
-                .role(request.getRole())
+                .role(Role.USER)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -46,6 +53,25 @@ public class AuthenticationService {
 //                .token
     }
 
-//    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-//    }
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(); // add Exception
+
+        String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+
+    }
 }
