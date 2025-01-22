@@ -7,12 +7,16 @@ import com.demo.ecommerce.enums.Role;
 import com.demo.ecommerce.model.User;
 import com.demo.ecommerce.repository.UserRepository;
 import com.demo.ecommerce.security.jwt.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 
 @Service
@@ -35,10 +39,9 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
 
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -46,19 +49,13 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(User user, String jwtToken) {
-//        var token = Token.builder()
-//                .user(user)
-//                .token
-    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
-                )
-        );
+                ));
 
         User user = userRepository
                 .findByEmail(request.getEmail())
@@ -71,6 +68,40 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
 
+
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        final String authHeader = request.getHeader("Authorization");
+        final String refreshToken;
+        final String email;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer "))
+            return;
+
+        refreshToken = authHeader.substring(7);
+        email = jwtService.getUsernameFromToken(refreshToken);
+
+        if (email != null) {
+            User user = userRepository
+                    .findByEmail(email)
+                    .orElseThrow();
+
+            if (jwtService.isTokenValid(refreshToken, user)) {
+                String accessToken = jwtService.generateToken(user);
+
+                var authenticationResponse = AuthenticationResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
+
+                new ObjectMapper().writeValue(
+                        response.getOutputStream(),
+                        authenticationResponse);
+            }
+        }
     }
 }
