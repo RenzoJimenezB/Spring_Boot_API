@@ -4,19 +4,17 @@ import com.demo.ecommerce.dto.auth.AuthenticationRequest;
 import com.demo.ecommerce.dto.auth.AuthenticationResponse;
 import com.demo.ecommerce.dto.auth.RegisterRequest;
 import com.demo.ecommerce.enums.Role;
+import com.demo.ecommerce.exception.InvalidRefreshTokenException;
 import com.demo.ecommerce.model.User;
 import com.demo.ecommerce.repository.UserRepository;
 import com.demo.ecommerce.security.jwt.JwtService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 
 @Service
@@ -71,37 +69,31 @@ public class AuthenticationService {
     }
 
 
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+    public AuthenticationResponse refreshToken(
+            HttpServletRequest request) {
 
-        final String authHeader = request.getHeader("Authorization");
-        final String refreshToken;
-        final String email;
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer "))
-            return;
+            throw new InvalidRefreshTokenException("Missing or invalid Authorization header");
 
-        refreshToken = authHeader.substring(7);
-        email = jwtService.getUsernameFromToken(refreshToken);
+        String refreshToken = authHeader.substring(7);
+        String email = jwtService.getUsernameFromToken(refreshToken);
 
-        if (email != null) {
-            User user = userRepository
-                    .findByEmail(email)
-                    .orElseThrow();
+        if (email == null)
+            throw new InvalidRefreshTokenException("Invalid refresh token");
 
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                String accessToken = jwtService.generateToken(user);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidRefreshTokenException("User not found"));
 
-                var authenticationResponse = AuthenticationResponse.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
+        if (!jwtService.isTokenValid(refreshToken, user))
+            throw new InvalidRefreshTokenException("Refresh token is expired or invalid");
 
-                new ObjectMapper().writeValue(
-                        response.getOutputStream(),
-                        authenticationResponse);
-            }
-        }
+        String accessToken = jwtService.generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

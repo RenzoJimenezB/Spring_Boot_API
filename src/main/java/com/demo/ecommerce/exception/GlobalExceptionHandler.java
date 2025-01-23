@@ -18,7 +18,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(S3Exception.class)
     public ResponseEntity<ApiResponse> handleS3Exception(S3Exception e) {
         String errorMessage = "S3 Exception: " + e.awsErrorDetails().errorMessage();
-        return ResponseEntity.status(e.statusCode())
+        return ResponseEntity
+                .status(e.statusCode())
                 .body(new ApiResponse(errorMessage, null));
     }
 
@@ -26,28 +27,41 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SdkClientException.class)
     public ResponseEntity<ApiResponse> handleSdkClientException(SdkClientException e) {
         String errorMessage = "AWS SDK Error: " + e.getMessage();
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR)
+                .body(new ApiResponse(errorMessage, null));
+    }
+
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ApiResponse> invalidRefreshTokenException(InvalidRefreshTokenException e) {
+        String errorMessage = "Invalid refresh token: " + e.getMessage();
+        return ResponseEntity
+                .status(UNAUTHORIZED)
                 .body(new ApiResponse(errorMessage, null));
     }
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFound(ResourceNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND)
+        return ResponseEntity
+                .status(NOT_FOUND)
                 .body(new ApiResponse(e.getMessage(), null));
     }
 
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ApiResponse> usernameNotFound(UsernameNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND)
+        return ResponseEntity
+                .status(NOT_FOUND)
                 .body(new ApiResponse(e.getMessage(), null));
     }
 
 
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ApiResponse> alreadyExists(AlreadyExistsException e) {
-        return ResponseEntity.status(CONFLICT)
+        return ResponseEntity
+                .status(CONFLICT)
                 .body(new ApiResponse(e.getMessage(), null));
     }
 
@@ -55,8 +69,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> unexpectedException(Exception e) {
         String errorMessage = "Error of type " + e.getClass().getSimpleName() + " : " + e.getMessage();
-
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse(errorMessage, null));
     }
 }
