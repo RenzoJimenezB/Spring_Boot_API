@@ -33,6 +33,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Image> images;
 
+    @OneToMany(mappedBy = "product")
+    private List<CartItem> cartItems;
+
     public Product(String name, String brand, BigDecimal price, int stock, String description, Category category) {
         this.name = name;
         this.brand = brand;
