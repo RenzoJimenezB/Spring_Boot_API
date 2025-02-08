@@ -18,7 +18,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-
     private final SecretKey secretKey;
 
 

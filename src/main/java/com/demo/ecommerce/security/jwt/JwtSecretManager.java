@@ -19,7 +19,6 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class JwtSecretManager {
 
-
     private final SecretsManagerClient secretsClient;
 
 
