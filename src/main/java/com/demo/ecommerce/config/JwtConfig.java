@@ -7,11 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
 
-
 @Configuration
 @RequiredArgsConstructor
 public class JwtConfig {
-
 
     private final JwtSecretManager jwtSecretManager;
 

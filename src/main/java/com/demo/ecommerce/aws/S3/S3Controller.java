@@ -11,12 +11,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/s3")
 public class S3Controller {
-
 
     private final S3Service s3Service;
 
