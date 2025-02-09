@@ -6,7 +6,6 @@ import com.demo.ecommerce.dto.product.AddProductRequest;
 import com.demo.ecommerce.dto.product.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
 
-
 public interface IProductService {
     Product addProduct(AddProductRequest product);
 

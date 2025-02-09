@@ -10,10 +10,8 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-
 
     @Mapping(source = "category.name", target = "category")
     @Mapping(source = "images", target = "imageUrls", qualifiedByName = "mapImagesToUrls")
