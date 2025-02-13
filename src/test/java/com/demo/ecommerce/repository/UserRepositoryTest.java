@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -20,6 +21,7 @@ class UserRepositoryTest {
 //    void tearDown() {
 //        underTest.deleteAll();
 //    }
+
 
     @Test
     void shouldReturnUser_WhenEmailExists() {
@@ -43,6 +45,7 @@ class UserRepositoryTest {
         assertThat(userOptional.isPresent()).isTrue();
     }
 
+
     @Test
     void shouldReturnNull_WhenEmailDoesNotExist() {
         // given
@@ -53,5 +56,28 @@ class UserRepositoryTest {
 
         // then
         assertThat(userOptional.isPresent()).isFalse();
+    }
+
+
+    @Test
+    void shoudlReturnUser_WhenEmailDomainExists() {
+        // given
+        String email = "test@gmail.com";
+        User user = User.builder()
+                .name("John")
+                .lastName("Doe")
+                .email(email)
+                .password("password")
+                .phone("123456789")
+                .role(Role.USER)
+                .build();
+
+        underTest.save(user);
+
+        // when
+        List<User> users = underTest.searchByEmailDomain("gmail.com");
+
+        // then
+        assertThat(users.size()).isEqualTo(1);
     }
 }
