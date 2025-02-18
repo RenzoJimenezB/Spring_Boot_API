@@ -20,8 +20,10 @@ public class Product {
 
     private String brand;
 
+    @Column(columnDefinition = "DECIMAL(10, 2)")
     private BigDecimal price;
 
+    @Column(columnDefinition = "SMALLINT")
     private int stock;
 
     private String description;
