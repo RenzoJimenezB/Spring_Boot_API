@@ -33,8 +33,9 @@ public class ImageService implements IImageService {
         image.setImageKey(imageKey);
         image.setProduct(product);
         Image savedImage = imageRepository.save(image);
+        ImageResponse imageResponse = imageMapper.toImageResponse(savedImage);
 
-        return new ApiResponse("Success", savedImage);
+        return new ApiResponse("Success", imageResponse);
     }
 
 
